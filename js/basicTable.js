@@ -1,6 +1,14 @@
 // Global variable
 var trans_flag = 0;
 
+document.querySelectorAll('input').forEach(function (inputElement) {
+    inputElement.addEventListener('keydown', function (event) {
+        if (event.key === "Enter") {
+            document.getElementById('calculate').click();
+        }
+    });
+});
+
 // Add a new row (decision)
 function addRow(rowClass) {
     let table = document.getElementById("basicDecisionTable");
@@ -120,22 +128,6 @@ function transposeTable() {
 }
 
 // Calculate decision criteria and display the selected decision names based on table names
-function formatDecimal(number) {
-    let str = Number(number).toString();
-
-    if (str.includes('.')) {
-        str = str.replace(/\.?0+$/, '');
-
-        const decimalLength = str.split('.')[1]?.length || 0;
-
-        if (decimalLength > 4) {
-            return Number(number).toFixed(4);
-        }
-    }
-
-    return str;
-}
-
 function calculate() {
     let table = document.getElementById("basicDecisionTable");
     let decisions = [];
@@ -165,18 +157,18 @@ function calculate() {
     }
 
     // MaxiMax
-    let maximaxValues = decisions.map(decision => Math.max(...decision.values));
-    let maximaxResult = Math.max(...maximaxValues);
-    let maximaxIndex = maximaxValues.indexOf(maximaxResult);
+    let maxValues = decisions.map(decision => Math.max(...decision.values));
+    let maximaxResult = Math.max(...maxValues);
+    let maximaxIndex = maxValues.indexOf(maximaxResult);
     document.getElementById("maximax").innerHTML = `${maximaxResult}`;
-    document.getElementById("maximaxSel").innerHTML = checkIndifference(maximaxValues) ? "Indifferent" : `${getDecisionName(maximaxIndex)}`;
+    document.getElementById("maximaxSel").innerHTML = checkIndifference(maxValues) ? "Indifferent" : `${getDecisionName(maximaxIndex)}`;
 
     // MaxiMin
-    let maximinValues = decisions.map(decision => Math.min(...decision.values));
-    let maximinResult = Math.max(...maximinValues);
-    let maximinIndex = maximinValues.indexOf(maximinResult);
+    let minValues = decisions.map(decision => Math.min(...decision.values));
+    let maximinResult = Math.max(...minValues);
+    let maximinIndex = minValues.indexOf(maximinResult);
     document.getElementById("maximin").innerHTML = `${maximinResult}`;
-    document.getElementById("maximinSel").innerHTML = checkIndifference(maximinValues) ? "Indifferent" : `${getDecisionName(maximinIndex)}`;
+    document.getElementById("maximinSel").innerHTML = checkIndifference(minValues) ? "Indifferent" : `${getDecisionName(maximinIndex)}`;
 
     // miniMax Regret
     let states = decisions[0].values.length;
@@ -196,18 +188,86 @@ function calculate() {
     document.getElementById("minimaxRegret").innerHTML = `${minMaxRegretResult}`;
     document.getElementById("minimaxRegretSel").innerHTML = checkIndifference(maxRegretValues) ? "Indifferent" : `${getDecisionName(minMaxRegretIndex)}`;
 
-    // Hurwicz’s optimism (α from user input)
-    let alpha = parseFloat(document.getElementById("alpha").value);
-    let hurwiczValues = decisions.map(decision => alpha * Math.max(...decision.values) + (1 - alpha) * Math.min(...decision.values));
-    let hurwiczResult = Math.max(...hurwiczValues);
-    let hurwiczIndex = hurwiczValues.indexOf(hurwiczResult);
-    document.getElementById("hurwicz").innerHTML = `${hurwiczResult}`;
-    document.getElementById("hurwiczSel").innerHTML = checkIndifference(hurwiczValues) ? "Indifferent" : `${getDecisionName(hurwiczIndex)}`;
-
     // Laplace's principle
     let laplaceValues = decisions.map(decision => decision.values.reduce((a, b) => a + b, 0) / decision.values.length);
     let laplaceResult = Math.max(...laplaceValues);
     let laplaceIndex = laplaceValues.indexOf(laplaceResult);
     document.getElementById("laplace").innerHTML = formatDecimal(laplaceResult);
     document.getElementById("laplaceSel").innerHTML = checkIndifference(laplaceValues) ? "Indifferent" : `${getDecisionName(laplaceIndex)}`;
+
+    // Hurwicz’s optimism (α from user input)
+    let alpha = parseFloat(Alpha());
+    let hurwiczValues = decisions.map(decision => alpha * Math.max(...decision.values) + (1 - alpha) * Math.min(...decision.values));
+    let hurwiczResult = Math.max(...hurwiczValues);
+    let hurwiczIndex = hurwiczValues.indexOf(hurwiczResult);
+    document.getElementById("hurwicz").innerHTML = `${hurwiczResult}`;
+    document.getElementById("hurwiczSel").innerHTML = checkIndifference(hurwiczValues) ? "Indifferent" : `${getDecisionName(hurwiczIndex)}`;
+    // Hurwicz’s optimism (calculate α)
+    if (rows.length === 2) {
+        let maxDiff = maxValues[0] - maxValues[1];
+        let minDiff = minValues[1] - minValues[0];
+        let calAlpha = 0
+        calAlpha = simAlpha(minDiff, minDiff + maxDiff)
+        document.getElementById("calAlpha").innerHTML = `α for indifferent Hurwicz optimism: ` + calAlpha
+    } else {
+        document.getElementById("calAlpha").innerHTML = ''
+    }
+}
+
+function formatDecimal(number) {
+    let str = Number(number).toString();
+
+    if (str.includes('.')) {
+        str = str.replace(/\.?0+$/, '');
+
+        const decimalLength = str.split('.')[1]?.length || 0;
+
+        if (decimalLength > 4) {
+            return Number(number).toFixed(4);
+        }
+    }
+
+    return str;
+}
+
+function Alpha() {
+    let alpha = document.getElementById("alpha").value;
+    alpha = eval(alpha);
+    document.getElementById("alpha").value = formatDecimal(alpha);
+    return alpha
+}
+
+function simAlpha(numerator, denominator) {
+    if (denominator === 0 || numerator === 0) {
+        return `0`;
+    }
+
+    // Calculate the greatest common divisor
+    const gcdValue = gcd(numerator, denominator);
+
+    // Simplify fractions using greatest common divisor
+    const simplifiedNumerator = numerator / gcdValue;
+    const simplifiedDenominator = denominator / gcdValue;
+
+    // Output the simplest fraction
+    if (simplifiedDenominator === 1) {
+        return `${simplifiedNumerator}`;
+    } else {
+        if (simplifiedDenominator < 0 && simplifiedNumerator > 0) {
+            return `-${simplifiedNumerator}/${Math.abs(simplifiedDenominator)}`;
+        } else {
+            return `${Math.abs(simplifiedNumerator)}/${Math.abs(simplifiedDenominator)}`;
+        }
+    }
+
+}
+
+// Function to find the greatest common divisor (GCD)
+function gcd(a, b) {
+    while (b !== 0) {
+        let temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return Math.abs(a);
 }
