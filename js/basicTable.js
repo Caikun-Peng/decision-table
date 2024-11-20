@@ -6,7 +6,8 @@ function addRow(rowClass) {
     let table = document.getElementById("basicDecisionTable");
     let newRow = table.insertRow(-1);
     let cell = newRow.insertCell(0);
-    cell.innerHTML = rowClass+`${table.rows.length - 1}`;
+    let value = rowClass + `${table.rows.length - 1}`;
+    cell.innerHTML = `<input type="text" value="${value}">`;
 
     for (let i = 1; i < table.rows[0].cells.length; i++) {
         let cell = newRow.insertCell(i);
@@ -27,7 +28,8 @@ function addColumn(colClass) {
     let table = document.getElementById("basicDecisionTable");
     let header = table.rows[0];
     let newCell = header.insertCell(-1);
-    newCell.innerHTML = colClass+`${header.cells.length - 1}`;
+    let value = colClass + `${header.cells.length - 1}`;
+    newCell.innerHTML = `<input type="text" value="${value}">`;
 
     for (let i = 1; i < table.rows.length; i++) {
         let cell = table.rows[i].insertCell(-1);
@@ -79,22 +81,6 @@ function removeAn() {
 }
 
 // Function to transpose the table (swap rows and columns)
-function formatDecimal(number) {
-    let str = Number(number).toString();
-
-    if (str.includes('.')) {
-        str = str.replace(/\.?0+$/, '');
-
-        const decimalLength = str.split('.')[1]?.length || 0;
-
-        if (decimalLength > 4) {
-            return Number(number).toFixed(4);
-        }
-    }
-
-    return str;
-}
-
 function transposeTable() {
     let table = document.getElementById("basicDecisionTable");
     let rows = Array.from(table.rows);
@@ -118,13 +104,14 @@ function transposeTable() {
         for (let j = 0; j < data.length; j++) {
             let newCell = newRow.insertCell(-1);
             if (i === 0 || j === 0) {
-                newCell.innerText = data[j][i]; // Set text for headers and first column
+                if (i === 0 && j === 0) {
+                    newCell.innerHTML = '';
+                } else {
+                    newCell.innerHTML = `<input type="text" value="${data[j][i]}">`; // Set text for headers and first column
+                }
             } else {
                 // Create a new input element for decision/state values
-                let input = document.createElement("input");
-                input.type = "text";
-                input.value = data[j][i];
-                newCell.appendChild(input);
+                newCell.innerHTML = `<input type="text" value="${data[j][i]}">`
             }
         }
     }
@@ -133,6 +120,22 @@ function transposeTable() {
 }
 
 // Calculate decision criteria and display the selected decision names based on table names
+function formatDecimal(number) {
+    let str = Number(number).toString();
+
+    if (str.includes('.')) {
+        str = str.replace(/\.?0+$/, '');
+
+        const decimalLength = str.split('.')[1]?.length || 0;
+
+        if (decimalLength > 4) {
+            return Number(number).toFixed(4);
+        }
+    }
+
+    return str;
+}
+
 function calculate() {
     let table = document.getElementById("basicDecisionTable");
     let decisions = [];
