@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Decision Table Calculator</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/basicTable.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header class="fixed-header">
+        <button class="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h1>Decision Table Calculator</h1>
+    </header>
+
+    <div class="sidebar">
+        <nav class="sidebar-menu">
+            <button class="menu-button" data-content="basicTable">Basic Decision Table</button>
+        </nav>
+    </div>
+
+    <div class="overlay"></div>
+
+    <div id="basicTable" class="content-section">
+        <h2>Basic Decision Table</h2>
+        <main class="content">
+            <div id="config-table">
+                <div class="content" id="config">
+                    <div id="Sn">
+                        <button onclick="addSn()">Add Sn</button>
+                        <button onclick="removeSn()">Remove Sn</button>
+                    </div>
+                    <div id="An">
+                        <button onclick="addAn()">Add An</button>
+                        <button onclick="removeAn()">Remove An</button>
+                    </div>
+                </div>
+
+                <table id="basicDecisionTable">
+                    <tr>
+                        <th></th>
+                        <th>A1</th>
+                        <th>A2</th>
+                    </tr>
+                    <tr>
+                        <td>s1</td>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>s2</td>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                    </tr>
+                </table>
+
+                <br>
+                <button onclick="transposeTable()">Transpose Table</button>
+                <br><br>
+
+                <div>
+                    <label for="alpha">Hurwicz Optimism Index (α): </label>
+                    <input type="number" id="alpha" step="0.01" value="0.5" style="text-align: left;">
+                </div>
+            </div>
+            <div id="cal-result">
+                <button onclick="calculate()">Calculate</button>
+
+                <h3>Results:</h3>
+                <table class="results" id="results">
+                    <tr>
+                        <th>Rule</th>
+                        <th>Results</th>
+                        <th>Select</th>
+                    </tr>
+                    <tr>
+                        <td>MaxiMax</td>
+                        <td id="maximax" type="number"></td>
+                        <td id="maximaxSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Maximin</td>
+                        <td id="maximin" type="number"></td>
+                        <td id="maximinSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>miniMax Regret</td>
+                        <td id="minimaxRegret" type="number"></td>
+                        <td id="minimaxRegretSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Hurwicz Optimism</td>
+                        <td id="hurwicz" type="number"></td>
+                        <td id="hurwiczSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Laplace's Principle</td>
+                        <td id="laplace" type="number"></td>
+                        <td id="laplaceSel" type="number"></td>
+                    </tr>
+                </table>
+            </div>
+            <script src="js/basicTable.js"></script>
+        </main>
+    </div>
+
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

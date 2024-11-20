@@ -1,0 +1,78 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.content #config {
+    gap: 0;
+    padding-top: 0;
+}
+
+/* Layout when screen width is greater than 1000px */
+@media screen and (min-width: 1000px) {
+    .content {
+        flex-direction: row !important;
+    }
+
+    #config-table {
+        flex: 3;
+        min-width: 0;
+    }
+
+    #cal-result {
+        flex: 2;
+        min-width: 0;
+    }
+
+    #Sn {
+        flex: 1;
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    #An {
+        flex: 1;
+        text-align: left;
+        padding-left: 10px;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .content {
+        max-width: 2560px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+table,
+th,
+td {
+    font-weight: normal;
+    margin: 0 auto;
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+    text-align: center;
+    max-width: fit-content;
+}
+
+input[type="text"] {
+    width: 25px;
+    text-align: center;
+}
+
+input[type="number"] {
+    width: 50px;
+    text-align: center;
+}
+
+button {
+    margin: 5px;
+    text-align: center;
+}
+
+.results th {
+    font-weight: bold;
+}
