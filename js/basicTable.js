@@ -149,8 +149,8 @@ function calculate() {
             row.push(parseFloat(cell.value) || 0);
         }
         decisions.push({
-            name: rows[i].cells[0].innerText.trim(), // Get decision name from the first cell
-            values: row
+            name: rows[i].cells[0].firstElementChild.value, // Get decision name from the first cell
+            values: row.slice(1)
         });
     }
 
