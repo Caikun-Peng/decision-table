@@ -37,9 +37,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // The first menu item and content area are activated by default
-    if (menuButtons.length > 0 && contentSections.length > 0) {
-        menuButtons[0].classList.add('active');
-        contentSections[0].classList.add('active');
-    }
+    // // The first menu item and content area are activated by default
+    // if (menuButtons.length > 0 && contentSections.length > 0) {
+    //     menuButtons[0].classList.add('active');
+    //     contentSections[0].classList.add('active');
+    // }
 });

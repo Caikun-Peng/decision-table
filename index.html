@@ -6,6 +6,7 @@
     <title>Decision Table Calculator</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/basicTable.css">
+    <link rel="stylesheet" href="css/mixture.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
@@ -20,6 +21,7 @@
     <div class="sidebar">
         <nav class="sidebar-menu">
             <button class="menu-button" data-content="basicTable">Basic Decision Table</button>
+            <button class="menu-button" data-content="mixturePlots">Mixture Decision Table</button>
         </nav>
     </div>
 
@@ -28,15 +30,15 @@
     <div id="basicTable" class="content-section">
         <h2>Basic Decision Table</h2>
         <main class="content">
-            <div id="config-table">
-                <div class="content" id="config">
-                    <div id="Sn">
-                        <button onclick="addSn()">Add Sn</button>
-                        <button onclick="removeSn()">Remove Sn</button>
+            <div class="config-table">
+                <div class="config">
+                    <div class="Sn">
+                        <button onclick="basicTable.addSn()">Add Sn</button>
+                        <button onclick="basicTable.removeSn()">Remove Sn</button>
                     </div>
-                    <div id="An">
-                        <button onclick="addAn()">Add An</button>
-                        <button onclick="removeAn()">Remove An</button>
+                    <div class="An">
+                        <button onclick="basicTable.addAn()">Add An</button>
+                        <button onclick="basicTable.removeAn()">Remove An</button>
                     </div>
                 </div>
 
@@ -59,7 +61,7 @@
                 </table>
 
                 <br>
-                <button onclick="transposeTable()">Transpose Table</button>
+                <button onclick="basicTable.transposeTable()">Transpose Table</button>
                 <br><br>
 
                 <div>
@@ -68,7 +70,7 @@
                 </div>
             </div>
             <div id="cal-result">
-                <button id="calculate" onclick="calculate()">Calculate</button>
+                <button id="calculate" onclick="basicTable.calculate()">Calculate</button>
 
                 <h3>Results:</h3>
                 <table class="results" id="results">
@@ -109,6 +111,75 @@
         </main>
     </div>
 
+    <div id="mixturePlots" class="content-section active">
+        <h2>Mixture Plots</h2>
+        <main class="content">
+            <div class="config-table">
+                <button onclick="mixtureTable.multiStates()">Multi States</button>
+                <button onclick="mixtureTable.multiActions()">Multi Actions</button><br>
+                <div class="config">
+                    <div class="An hide">
+                        <button onclick="mixtureTable.addRow('A')">Add An</button>
+                        <button onclick="mixtureTable.removeRow()">Remove An</button>
+                    </div>
+                    <div class="Sn">
+                        <button onclick="mixtureTable.addRow('s')">Add Sn</button>
+                        <button onclick="mixtureTable.removeRow()">Remove Sn</button>
+                    </div>
+                </div>
+
+                <table id="mixtureDecisionTable">
+                    <tr>
+                        <th></th>
+                        <th><input type="text" value="A1"></th>
+                        <th><input type="text" value="A2"></th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="s1"></td>
+                        <td><input type="text" oninput="mixtureTable.showCanvas()" value=""></td>
+                        <td><input type="text" oninput="mixtureTable.showCanvas()" value=""></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="s2"></td>
+                        <td><input type="text" oninput="mixtureTable.showCanvas()" value=""></td>
+                        <td><input type="text" oninput="mixtureTable.showCanvas()" value=""></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="draw-canvas">
+
+                <button onclick="mixtureTable.showCanvas()">Show Canvas</button>
+                <br>
+                <div>
+                    <div class="multiStates">
+                        <label for="p">Probability (p): </label>
+                        <input type="text" id="pro" min="0" max="1" step="0.001" value="0.5"
+                            style="text-align: left; width: 50px;"><br>
+                        <input type="range" id="slider" min="0" max="1" step="0.001" value="0.5"
+                            style="width: 315px;" />
+                    </div>
+                    <div id="canvas-container" style="position: relative">
+                        <canvas id="mixtureCanvas" width="400" height="400"
+                            style="position: absolute; top: 0; z-index: 1;"></canvas><br>
+                        <canvas id="mixtureProbability" width="400" height="400"
+                            style="position: absolute; top: 0; z-index: 2;"></canvas><br>
+                        <canvas id="result" width="400" height="400"
+                            style="position: absolute; top: 0; z-index: 3;"></canvas><br>
+                    </div>
+                    <div class="multiStates">
+                        <button id="M">M</button>
+                        <button id="maxiMin">Maximin</button>
+                        <button id="miniMax">MiniMax</button>
+                    </div>
+                    <div class="multiActions">
+                        <button id="regret">Regret</button>
+                    </div>
+                    <button id="redraw">Clear</button>
+                </div>
+                <script src="js/mixture.js"></script>
+        </main>
+    </div>
 
     <script src="js/main.js"></script>
 </body>
