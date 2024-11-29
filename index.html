@@ -22,6 +22,7 @@
         <nav class="sidebar-menu">
             <button class="menu-button" data-content="basicTable">Basic Decision Table</button>
             <button class="menu-button" data-content="mixturePlots">Mixture Decision Table</button>
+            <button class="menu-button" data-content="twoPlayer">Two Player Decision</button>
         </nav>
     </div>
 
@@ -182,7 +183,7 @@
                         <button id="maxiMin">Maximin</button>
                         <button id="miniMax">MiniMax</button>
                     </div>
-                    <div class="multiActions">
+                    <div class="multiActions hide">
                         <button id="regret">Regret</button>
                     </div>
                     <button id="redraw">Clear</button>
@@ -211,24 +212,24 @@
                         <th></th>
                         <th><input type="text" value="B1"></th>
                         <th><input type="text" value="B2"></th>
-                        <th>MIN</th>
+                        <th>MAX</th>
                     </tr>
                     <tr>
                         <td><input type="text" value="A1"></td>
                         <td><input type="text"><input type="text"></td>
                         <td><input type="text"><input type="text"></td>
-                        <td class="MIN"></td>
+                        <td class="cMAX"></td>
                     </tr>
                     <tr>
                         <td><input type="text" value="A2"></td>
                         <td><input type="text"><input type="text"></td>
                         <td><input type="text"><input type="text"></td>
-                        <td class="MIN"></td>
+                        <td class="cMAX"></td>
                     </tr>
                     <tr>
                         <td>MAX</td>
-                        <td class="MAX"></td>
-                        <td class="MAX"></td>
+                        <td class="rMAX"></td>
+                        <td class="rMAX"></td>
                         <td></td>
                     </tr>
                 </table>
@@ -236,14 +237,14 @@
                 <!-- <br>
                 <button onclick="basicTable.transposeTable()">Transpose Table</button>
                 <br><br> -->
-<!--
+                <!--
                 <div>
                     <label for="alpha">Hurwicz Optimism Index (α): </label>
                     <input type="text" id="alpha" step="0.01" value="0.5" style="text-align: left; width: 50px;">
                 </div> -->
             </div>
             <div id="cal-result">
-                <button id="calculate" onclick="basicTable.calculate()">Calculate</button>
+                <button id="calculate" onclick="twoPlayerTable.calculate()">Calculate</button>
 
                 <h3>Results:</h3>
                 <!-- <table class="results" id="results">
@@ -280,7 +281,7 @@
                 </table> -->
                 <div>Equilibria show in yellow boxes if exist.</div>
             </div>
-            <script src="js/twoPlayerTable.js"></script>
+            <script src="js/twoPlayer.js"></script>
         </main>
     </div>
 
