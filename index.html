@@ -47,16 +47,25 @@
                         <th></th>
                         <th><input type="text" value="A1"></th>
                         <th><input type="text" value="A2"></th>
+                        <th>MIN</th>
                     </tr>
                     <tr>
                         <td><input type="text" value="s1"></td>
                         <td><input type="text"></td>
                         <td><input type="text"></td>
+                        <td class="MIN"></td>
                     </tr>
                     <tr>
                         <td><input type="text" value="s2"></td>
                         <td><input type="text"></td>
                         <td><input type="text"></td>
+                        <td class="MIN"></td>
+                    </tr>
+                    <tr>
+                        <td>MAX</td>
+                        <td class="MAX"></td>
+                        <td class="MAX"></td>
+                        <td></td>
                     </tr>
                 </table>
 
@@ -105,13 +114,14 @@
                         <td id="hurwiczSel" type="number"></td>
                     </tr>
                 </table>
-                <div id="calAlpha" style="margin-top: 10px;"></div>
+                <div id="calAlpha" style="margin-top: 10px;"></div><br>
+                <div>Equilibria show in yellow boxes if exist.</div>
             </div>
             <script src="js/basicTable.js"></script>
         </main>
     </div>
 
-    <div id="mixturePlots" class="content-section active">
+    <div id="mixturePlots" class="content-section">
         <h2>Mixture Plots</h2>
         <main class="content">
             <div class="config-table">
@@ -178,6 +188,99 @@
                     <button id="redraw">Clear</button>
                 </div>
                 <script src="js/mixture.js"></script>
+        </main>
+    </div>
+
+    <div id="twoPlayer" class="content-section">
+        <h2>Two Player Decision</h2>
+        <main class="content">
+            <div class="config-table">
+                <div class="config">
+                    <div class="Sn">
+                        <button onclick="twoPlayerTable.addAn()">Add An</button>
+                        <button onclick="twoPlayerTable.removeAn()">Remove An</button>
+                    </div>
+                    <div class="An">
+                        <button onclick="twoPlayerTable.addBn()">Add Bn</button>
+                        <button onclick="twoPlayerTable.removeBn()">Remove Bn</button>
+                    </div>
+                </div>
+
+                <table id="twoPlayerTable">
+                    <tr>
+                        <th></th>
+                        <th><input type="text" value="B1"></th>
+                        <th><input type="text" value="B2"></th>
+                        <th>MIN</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="A1"></td>
+                        <td><input type="text"><input type="text"></td>
+                        <td><input type="text"><input type="text"></td>
+                        <td class="MIN"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="A2"></td>
+                        <td><input type="text"><input type="text"></td>
+                        <td><input type="text"><input type="text"></td>
+                        <td class="MIN"></td>
+                    </tr>
+                    <tr>
+                        <td>MAX</td>
+                        <td class="MAX"></td>
+                        <td class="MAX"></td>
+                        <td></td>
+                    </tr>
+                </table>
+
+                <!-- <br>
+                <button onclick="basicTable.transposeTable()">Transpose Table</button>
+                <br><br> -->
+<!--
+                <div>
+                    <label for="alpha">Hurwicz Optimism Index (α): </label>
+                    <input type="text" id="alpha" step="0.01" value="0.5" style="text-align: left; width: 50px;">
+                </div> -->
+            </div>
+            <div id="cal-result">
+                <button id="calculate" onclick="basicTable.calculate()">Calculate</button>
+
+                <h3>Results:</h3>
+                <!-- <table class="results" id="results">
+                    <tr>
+                        <th>Rule</th>
+                        <th>Results</th>
+                        <th>Select</th>
+                    </tr>
+                    <tr>
+                        <td>MaxiMax</td>
+                        <td id="maximax" type="number"></td>
+                        <td id="maximaxSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Maximin</td>
+                        <td id="maximin" type="number"></td>
+                        <td id="maximinSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>miniMax Regret</td>
+                        <td id="minimaxRegret" type="number"></td>
+                        <td id="minimaxRegretSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Laplace's Principle</td>
+                        <td id="laplace" type="number"></td>
+                        <td id="laplaceSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Hurwicz Optimism</td>
+                        <td id="hurwicz" type="number"></td>
+                        <td id="hurwiczSel" type="number"></td>
+                    </tr>
+                </table> -->
+                <div>Equilibria show in yellow boxes if exist.</div>
+            </div>
+            <script src="js/twoPlayerTable.js"></script>
         </main>
     </div>
 

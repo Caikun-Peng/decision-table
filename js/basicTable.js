@@ -13,51 +13,71 @@ var basicTable = (function () {
         });
     }
 
-    // Add a new row (decision)
+    // 在倒数第二行后添加一行
     function addRow(rowClass) {
         let table = document.getElementById("basicDecisionTable");
-        let newRow = table.insertRow(-1);
+        let rowIndex = table.rows.length - 1; // 倒数第二行的索引
+        let newRow = table.insertRow(rowIndex); // 在倒数第二行后插入
         let cell = newRow.insertCell(0);
-        let value = rowClass + `${table.rows.length - 1}`;
+        let value = rowClass + `${rowIndex}`;
         cell.innerHTML = `<input type="text" value="${value}">`;
 
-        for (let i = 1; i < table.rows[0].cells.length; i++) {
+        // 对新行的其他单元格添加 <input>
+        for (let i = 1; i < table.rows[0].cells.length - 1; i++) {
             let cell = newRow.insertCell(i);
             cell.innerHTML = `<input type="text">`;
         }
+
+        // 最后一个单元格不含 <input>
+        let lastCell = newRow.insertCell(-1);
+        lastCell.innerHTML = "";
+        lastCell.classList.add('MIN');
     }
 
-    // Remove the last row
+    // 删除倒数第二行
     function removeRow() {
         let table = document.getElementById("basicDecisionTable");
-        if (table.rows.length > 2) {
-            table.deleteRow(-1);
+        if (table.rows.length > 3) { // 至少保留两行（头部行和一行数据行）
+            table.deleteRow(table.rows.length - 2); // 删除倒数第二行
         }
     }
 
-    // Add a new column (state)
+    // 在倒数第二列后添加一列
     function addColumn(colClass) {
         let table = document.getElementById("basicDecisionTable");
+        let colIndex = table.rows[0].cells.length - 1; // 倒数第二列的索引
+
+        // 添加到表头的倒数第二列后
         let header = table.rows[0];
-        let newCell = header.insertCell(-1);
-        let value = colClass + `${header.cells.length - 1}`;
+        let newCell = header.insertCell(colIndex);
+        let value = colClass + `${colIndex}`;
         newCell.innerHTML = `<input type="text" value="${value}">`;
 
+        // 对其他行添加对应的新列
         for (let i = 1; i < table.rows.length; i++) {
-            let cell = table.rows[i].insertCell(-1);
-            cell.innerHTML = `<input type="text">`;
-        }
-    }
+            let cell = table.rows[i].insertCell(colIndex);
 
-    // Remove the last column
-    function removeColumn() {
-        let table = document.getElementById("basicDecisionTable");
-        if (table.rows[0].cells.length > 2) {
-            for (let i = 0; i < table.rows.length; i++) {
-                table.rows[i].deleteCell(-1);
+            // 如果是最后一行，不添加 <input>
+            if (i === table.rows.length - 1) {
+                cell.innerHTML = "";
+                cell.classList.add('MAX');
+            } else {
+                cell.innerHTML = `<input type="text">`;
             }
         }
     }
+
+    // 删除倒数第二列
+    function removeColumn() {
+        let table = document.getElementById("basicDecisionTable");
+        if (table.rows[0].cells.length > 3) { // 至少保留两列（首列和一列数据列）
+            let colIndex = table.rows[0].cells.length - 2; // 倒数第二列的索引
+            for (let i = 0; i < table.rows.length; i++) {
+                table.rows[i].deleteCell(colIndex); // 删除每行的倒数第二列
+            }
+        }
+    }
+
 
     function addSn() {
         if (trans_flag === 0) {
@@ -117,12 +137,18 @@ var basicTable = (function () {
                 if (i === 0 || j === 0) {
                     if (i === 0 && j === 0) {
                         newCell.innerHTML = '';
+                    } else if (i === data[0].length - 1 || j === data.length - 1) {
+                        newCell.innerHTML = data[i][j]; // Clear the last cell of each row and column
                     } else {
                         newCell.innerHTML = `<input type="text" value="${data[j][i]}">`; // Set text for headers and first column
                     }
                 } else {
                     // Create a new input element for decision/state values
-                    newCell.innerHTML = `<input type="text" value="${data[j][i]}">`
+                    if (i === data[0].length - 1 || j === data.length - 1) {
+                        // newCell.innerHTML = data[j][j];
+                    } else {
+                        newCell.innerHTML = `<input type="text" value="${data[j][i]}">`
+                    }
                 }
             }
         }
@@ -130,14 +156,65 @@ var basicTable = (function () {
         trans_flag = (trans_flag + 1) % 2;
     }
 
+    // Show row MIN and col MAX
+    function showMinMax() {
+        console.log('showMinMax');
+        let minValues = [];
+        let maxValues = [];
+        let table = document.getElementById("basicDecisionTable");
+        let rows = Array.from(table.getElementsByTagName("tr")).slice(1); // Get all decision rows
+        for (let j = 0; j < rows.length; j++) {
+            let cells = rows[j].getElementsByTagName('input');
+            let values = Array.from(cells).map(cell => parseFloat(cell.value) || 0);
+            values.shift();
+            // console.info(j, 'row values: ', values);
+            minValues.push(Math.min(...values));
+        }
+        for (let i = 1; i < rows[0].getElementsByTagName('input').length; i++) {
+            let values = [];
+            for (let j = 0; j < rows.length; j++) {
+                let cells = rows[j].getElementsByTagName('input');
+                let value = Array.from(cells).map(cell => parseFloat(cell.value) || 0);
+                values.push(value[i]);
+            }
+            values = values.filter(item => item !== undefined);
+            // console.info(i, 'col values: ', values);
+            maxValues.push(Math.max(...values));
+        }
+
+        let rMIN = document.getElementsByClassName("MIN");
+        let cMAX = document.getElementsByClassName("MAX");
+        for (let i = 0; i < rMIN.length; i++) {
+            rMIN[i].innerHTML = minValues[i];
+        }
+        for (let i = 0; i < cMAX.length; i++) {
+            cMAX[i].innerHTML = maxValues[i];
+        }
+
+        for (let i = 0; i < rows.length; i++) {
+            let cells = rows[i].getElementsByTagName('input');
+            for (let j = 1; j < cells.length; j++) {
+                // console.info("cell:", cells[j].value, "min", minValues[i], "max", maxValues[j-1]);
+                if (cells[j].value == minValues[i] && cells[j].value == maxValues[j-1]) {
+                    cells[j].style.backgroundColor = "yellow";
+                } else {
+                    cells[j].style.backgroundColor = "";
+                }
+
+            }
+        }
+    }
+
+
     // Calculate decision criteria and display the selected decision names based on table names
     function calculate() {
+        showMinMax();
         let table = document.getElementById("basicDecisionTable");
         let decisions = [];
         let rows = Array.from(table.getElementsByTagName("tr")).slice(1); // Get all decision rows
 
         // Extract decision table data and names
-        for (let i = 0; i < rows.length; i++) {
+        for (let i = 0; i < rows.length - 1; i++) {
             let cells = rows[i].getElementsByTagName('input');
             let row = [];
             for (let cell of cells) {
@@ -206,7 +283,7 @@ var basicTable = (function () {
         document.getElementById("hurwicz").innerHTML = `${hurwiczResult}`;
         document.getElementById("hurwiczSel").innerHTML = checkIndifference(hurwiczValues) ? "Indifferent" : `${getDecisionName(hurwiczIndex)}`;
         // Hurwicz’s optimism (calculate α)
-        if (rows.length === 2) {
+        if (rows.length === 3) {
             let maxDiff = maxValues[0] - maxValues[1];
             let minDiff = minValues[1] - minValues[0];
             let calAlpha = 0;
