@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Decision Table Calculator</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/basicTable.css">
+    <link rel="stylesheet" href="css/mixture.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header class="fixed-header">
+        <button class="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h1>Decision Table Calculator</h1>
+        <a href="https://github.com/Caikun-Peng/decision-table" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32" fill="black">
+                <path
+                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.11 0 0 .67-.21 2.2.82.64-.18 1.33-.27 2.02-.27.69 0 1.38.09 2.02.27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.91.08 2.11.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+            </svg>
+        </a>
+    </header>
+
+    <div class="sidebar">
+        <nav class="sidebar-menu">
+            <button class="menu-button" data-content="basicTable">Basic Decision Table</button>
+            <button class="menu-button" data-content="mixturePlots">Mixture Decision Table</button>
+            <button class="menu-button" data-content="twoPlayer">Two Player Decision</button>
+        </nav>
+    </div>
+
+    <div class="overlay"></div>
+
+    <div id="basicTable" class="content-section">
+        <h2>Basic Decision Table</h2>
+        <main class="content">
+            <div class="config-table">
+                <div class="config">
+                    <div class="Sn">
+                        <button onclick="basicTable.addSn()">Add Sn</button>
+                        <button onclick="basicTable.removeSn()">Remove Sn</button>
+                    </div>
+                    <div class="An">
+                        <button onclick="basicTable.addAn()">Add An</button>
+                        <button onclick="basicTable.removeAn()">Remove An</button>
+                    </div>
+                </div>
+
+                <table id="basicDecisionTable">
+                    <tr>
+                        <th></th>
+                        <th><input type="text" value="A1"></th>
+                        <th><input type="text" value="A2"></th>
+                        <th>MIN</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="s1"></td>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                        <td class="MIN"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="s2"></td>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                        <td class="MIN"></td>
+                    </tr>
+                    <tr>
+                        <td>MAX</td>
+                        <td class="MAX"></td>
+                        <td class="MAX"></td>
+                        <td></td>
+                    </tr>
+                </table>
+
+                <br>
+                <button onclick="basicTable.transposeTable()">Transpose Table</button>
+                <br><br>
+
+                <div>
+                    <label for="alpha">Hurwicz Optimism Index (α): </label>
+                    <input type="text" id="alpha" step="0.01" value="0.5" style="text-align: left; width: 50px;"><br>
+                    <button id="calculate" onclick="basicTable.calculate()">Calculate</button>
+                </div>
+            </div>
+            <div class="cal-result">
+
+                <h3>Results:</h3>
+                <table class="results" id="results">
+                    <tr>
+                        <th>Rule</th>
+                        <th>Results</th>
+                        <th>Select</th>
+                    </tr>
+                    <tr>
+                        <td>MaxiMax</td>
+                        <td id="maximax" type="number"></td>
+                        <td id="maximaxSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Maximin</td>
+                        <td id="maximin" type="number"></td>
+                        <td id="maximinSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>miniMax Regret</td>
+                        <td id="minimaxRegret" type="number"></td>
+                        <td id="minimaxRegretSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Laplace's Principle</td>
+                        <td id="laplace" type="number"></td>
+                        <td id="laplaceSel" type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Hurwicz Optimism</td>
+                        <td id="hurwicz" type="number"></td>
+                        <td id="hurwiczSel" type="number"></td>
+                    </tr>
+                </table>
+                <div id="calAlpha" style="margin-top: 10px;"></div><br>
+                <div>Equilibria show in yellow boxes if exist.</div>
+            </div>
+            <script src="js/basicTable.js"></script>
+        </main>
+    </div>
+
+    <div id="mixturePlots" class="content-section">
+        <h2>Mixture Plots</h2>
+        <main class="content">
+            <div class="config-table">
+                <button onclick="mixtureTable.multiStates()">Multi States</button>
+                <button onclick="mixtureTable.multiActions()">Multi Actions</button><br>
+                <div class="config">
+                    <div class="An hide">
+                        <button onclick="mixtureTable.addRow('A')">Add An</button>
+                        <button onclick="mixtureTable.removeRow()">Remove An</button>
+                    </div>
+                    <div class="Sn">
+                        <button onclick="mixtureTable.addRow('s')">Add Sn</button>
+                        <button onclick="mixtureTable.removeRow()">Remove Sn</button>
+                    </div>
+                </div>
+
+                <table id="mixtureDecisionTable">
+                    <tr>
+                        <th></th>
+                        <th><input type="text" value="A1"></th>
+                        <th><input type="text" value="A2"></th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="s1"></td>
+                        <td><input type="text" oninput="mixtureTable.showCanvas()" value=""></td>
+                        <td><input type="text" oninput="mixtureTable.showCanvas()" value=""></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="s2"></td>
+                        <td><input type="text" oninput="mixtureTable.showCanvas()" value=""></td>
+                        <td><input type="text" oninput="mixtureTable.showCanvas()" value=""></td>
+                    </tr>
+                </table>
+                <button onclick="mixtureTable.showCanvas()">Show Canvas</button>
+            </div>
+
+            <div id="draw-canvas">
+
+                <br>
+                <div>
+                    <div class="multiStates">
+                        <label for="p">Probability (p): </label>
+                        <input type="text" id="pro" min="0" max="1" step="0.001" value="0.5"
+                            style="text-align: left; width: 50px;"><br>
+                        <input type="range" id="slider" min="0" max="1" step="0.001" value="0.5"
+                            style="width: 315px;" />
+                    </div>
+                    <div id="canvas-container" style="position: relative">
+                        <canvas id="mixtureCanvas" width="400" height="400"
+                            style="position: absolute; top: 0; z-index: 1;"></canvas><br>
+                        <canvas id="mixtureProbability" width="400" height="400"
+                            style="position: absolute; top: 0; z-index: 2;"></canvas><br>
+                        <canvas id="result" width="400" height="400"
+                            style="position: absolute; top: 0; z-index: 3;"></canvas><br>
+                    </div>
+                    <div class="multiStates">
+                        <button id="M">M</button>
+                        <button id="maxiMin">Maximin</button>
+                        <button id="miniMax">MiniMax</button>
+                    </div>
+                    <div class="multiActions hide">
+                        <button id="regret">Regret</button>
+                    </div>
+                    <button id="redraw">Clear</button>
+                </div>
+                <script src="js/mixture.js"></script>
+        </main>
+    </div>
+
+    <div id="twoPlayer" class="content-section">
+        <h2>Two Player Decision</h2>
+        <main class="content">
+            <div class="config-table">
+                <div class="config">
+                    <div class="Sn">
+                        <button onclick="twoPlayerTable.addAn()">Add An</button>
+                        <button onclick="twoPlayerTable.removeAn()">Remove An</button>
+                    </div>
+                    <div class="An">
+                        <button onclick="twoPlayerTable.addBn()">Add Bn</button>
+                        <button onclick="twoPlayerTable.removeBn()">Remove Bn</button>
+                    </div>
+                </div>
+
+                <table id="twoPlayerTable">
+                    <tr>
+                        <th></th>
+                        <th><input type="text" value="B1"></th>
+                        <th><input type="text" value="B2"></th>
+                        <th>MAX</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="A1"></td>
+                        <td><input type="text"><input type="text"></td>
+                        <td><input type="text"><input type="text"></td>
+                        <td class="cMAX"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="A2"></td>
+                        <td><input type="text"><input type="text"></td>
+                        <td><input type="text"><input type="text"></td>
+                        <td class="cMAX"></td>
+                    </tr>
+                    <tr>
+                        <td>MAX</td>
+                        <td class="rMAX"></td>
+                        <td class="rMAX"></td>
+                        <td></td>
+                    </tr>
+                </table>
+
+                <button id="calculate" onclick="twoPlayerTable.calculate()">Calculate</button>
+                <div>Equilibria are shown in yellow boxes if exist.</div>
+                <div>Pareto Optimal points are the green points on the chart.</div>
+            </div>
+            <div class="cal-result">
+
+                <h3>Results:</h3>
+                <canvas id="twoPlayerResult" width="400" height="400"></canvas>
+            </div>
+            <script src="js/twoPlayer.js"></script>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
