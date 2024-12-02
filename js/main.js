@@ -17,19 +17,32 @@ document.addEventListener('DOMContentLoaded', function () {
         overlay.classList.remove('active');
     });
 
+    // Function to handle activating menu and content by ID
+    function activateContentById(targetId) {
+        // Remove all active status
+        menuButtons.forEach(btn => btn.classList.remove('active'));
+        contentSections.forEach(section => section.classList.remove('active'));
+
+        // Add active status to the matching menu button and content section
+        const targetButton = Array.from(menuButtons).find(btn => btn.dataset.content === targetId);
+        const targetSection = document.getElementById(targetId);
+
+        if (targetButton && targetSection) {
+            targetButton.classList.add('active');
+            targetSection.classList.add('active');
+        }
+    }
+
     // Handle menu click events
     menuButtons.forEach(button => {
         button.addEventListener('click', function () {
-            // Get the ID of the content area to be displayed
             const targetId = this.dataset.content;
 
-            // Remove all active status
-            menuButtons.forEach(btn => btn.classList.remove('active'));
-            contentSections.forEach(section => section.classList.remove('active'));
+            // Update URL hash
+            window.location.hash = targetId;
 
-            // Add new activity status
-            this.classList.add('active');
-            document.getElementById(targetId).classList.add('active');
+            // Activate corresponding menu and content
+            activateContentById(targetId);
 
             // Close sidebar
             sidebar.classList.remove('active');
@@ -37,9 +50,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // The first menu item and content area are activated by default
-    if (menuButtons.length > 0 && contentSections.length > 0) {
-        menuButtons[0].classList.add('active');
-        contentSections[0].classList.add('active');
+    // Activate content based on current hash in the URL
+    function handleHashChange() {
+        const hash = window.location.hash.slice(1); // Remove the '#' from the hash
+        if (hash) {
+            activateContentById(hash);
+        } else if (menuButtons.length > 0 && contentSections.length > 0) {
+            // If no hash, activate the first menu and content by default
+            activateContentById(menuButtons[0].dataset.content);
+        }
     }
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+
+    // Initialize based on current hash on page load
+    handleHashChange();
 });

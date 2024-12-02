@@ -13,51 +13,51 @@ var basicTable = (function () {
         });
     }
 
-    // 在倒数第二行后添加一行
+    // Add a line after the second to last line
     function addRow(rowClass) {
         let table = document.getElementById("basicDecisionTable");
-        let rowIndex = table.rows.length - 1; // 倒数第二行的索引
-        let newRow = table.insertRow(rowIndex); // 在倒数第二行后插入
+        let rowIndex = table.rows.length - 1; // Index of the penultimate row
+        let newRow = table.insertRow(rowIndex); // Insert after the penultimate line
         let cell = newRow.insertCell(0);
         let value = rowClass + `${rowIndex}`;
         cell.innerHTML = `<input type="text" value="${value}">`;
 
-        // 对新行的其他单元格添加 <input>
+        // Add <input> to other cells in the new row
         for (let i = 1; i < table.rows[0].cells.length - 1; i++) {
             let cell = newRow.insertCell(i);
             cell.innerHTML = `<input type="text">`;
         }
 
-        // 最后一个单元格不含 <input>
+        // The last cell does not contain <input>
         let lastCell = newRow.insertCell(-1);
         lastCell.innerHTML = "";
         lastCell.classList.add('MIN');
     }
 
-    // 删除倒数第二行
+    // Delete the second to last line
     function removeRow() {
         let table = document.getElementById("basicDecisionTable");
-        if (table.rows.length > 3) { // 至少保留两行（头部行和一行数据行）
-            table.deleteRow(table.rows.length - 2); // 删除倒数第二行
+        if (table.rows.length > 3) { // Keep at least two rows (header row and one data row)
+            table.deleteRow(table.rows.length - 2); // Delete the second to last line
         }
     }
 
-    // 在倒数第二列后添加一列
+    // Add a column after the penultimate column
     function addColumn(colClass) {
         let table = document.getElementById("basicDecisionTable");
-        let colIndex = table.rows[0].cells.length - 1; // 倒数第二列的索引
+        let colIndex = table.rows[0].cells.length - 1; // Index of the penultimate column
 
-        // 添加到表头的倒数第二列后
+        // Add to the header after the penultimate column
         let header = table.rows[0];
         let newCell = header.insertCell(colIndex);
         let value = colClass + `${colIndex}`;
         newCell.innerHTML = `<input type="text" value="${value}">`;
 
-        // 对其他行添加对应的新列
+        // Add corresponding new columns to other rows
         for (let i = 1; i < table.rows.length; i++) {
             let cell = table.rows[i].insertCell(colIndex);
 
-            // 如果是最后一行，不添加 <input>
+            // If it is the last line, do not add <input>
             if (i === table.rows.length - 1) {
                 cell.innerHTML = "";
                 cell.classList.add('MAX');
@@ -67,13 +67,13 @@ var basicTable = (function () {
         }
     }
 
-    // 删除倒数第二列
+    // Delete the second to last column
     function removeColumn() {
         let table = document.getElementById("basicDecisionTable");
-        if (table.rows[0].cells.length > 3) { // 至少保留两列（首列和一列数据列）
-            let colIndex = table.rows[0].cells.length - 2; // 倒数第二列的索引
+        if (table.rows[0].cells.length > 3) { // Keep at least two columns (the first column and one data column)
+            let colIndex = table.rows[0].cells.length - 2; // Index of the penultimate column
             for (let i = 0; i < table.rows.length; i++) {
-                table.rows[i].deleteCell(colIndex); // 删除每行的倒数第二列
+                table.rows[i].deleteCell(colIndex); // Delete the second to last column of each row
             }
         }
     }
@@ -144,8 +144,10 @@ var basicTable = (function () {
                     }
                 } else {
                     // Create a new input element for decision/state values
-                    if (i === data[0].length - 1 || j === data.length - 1) {
-                        // newCell.innerHTML = data[j][j];
+                    if (i === data[0].length - 1) {
+                        newCell.classList.add('MAX');
+                    } else if (j === data.length - 1) {
+                        newCell.classList.add('MIN');
                     } else {
                         newCell.innerHTML = `<input type="text" value="${data[j][i]}">`
                     }
@@ -195,7 +197,7 @@ var basicTable = (function () {
             let cells = rows[i].getElementsByTagName('input');
             for (let j = 1; j < cells.length; j++) {
                 // console.info("cell:", cells[j].value, "min", minValues[i], "max", maxValues[j-1]);
-                if (cells[j].value == minValues[i] && cells[j].value == maxValues[j-1]) {
+                if (cells[j].value == minValues[i] && cells[j].value == maxValues[j - 1]) {
                     cells[j].style.backgroundColor = "yellow";
                 } else {
                     cells[j].style.backgroundColor = "";

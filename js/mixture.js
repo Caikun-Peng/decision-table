@@ -45,8 +45,8 @@ var mixtureTable = (function () {
         const Sn = document.querySelectorAll('.Sn');
         const mS = document.querySelectorAll('.multiStates');
         const mA = document.querySelectorAll('.multiActions');
-        An.forEach(btn => btn.classList.add('hide'));
-        Sn.forEach(btn => btn.classList.remove('hide'));
+        An[1].classList.add('hide');
+        Sn[1].classList.remove('hide');
         mS.forEach(btn => btn.classList.remove('hide'));
         mA.forEach(btn => btn.classList.add('hide'));
         resetTable();
@@ -59,8 +59,8 @@ var mixtureTable = (function () {
         const Sn = document.querySelectorAll('.Sn');
         const mS = document.querySelectorAll('.multiStates');
         const mA = document.querySelectorAll('.multiActions');
-        An.forEach(btn => btn.classList.remove('hide'));
-        Sn.forEach(btn => btn.classList.add('hide'));
+        An[1].classList.remove('hide');
+        Sn[1].classList.add('hide');
         mS.forEach(btn => btn.classList.add('hide'));
         mA.forEach(btn => btn.classList.remove('hide'));
         resetAndTransposeTable();
@@ -851,5 +851,6 @@ var mixtureTable = (function () {
 
 // Initialize event listeners when document is loaded
 mixtureTable.initEventListeners();
+mixtureTable.multiStates();
 // mixtureTable.showCanvas();
 // mixtureTable.drawPro();

@@ -24,12 +24,12 @@
     }
 
     .config-table {
-        flex: 3;
+        flex: 1;
         min-width: 0;
     }
 
-    #cal-result {
-        flex: 2;
+    .cal-result {
+        flex: 1;
         min-width: 0;
     }
 

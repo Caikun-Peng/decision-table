@@ -20,6 +20,13 @@ html {
     align-items: center;
 }
 
+.fixed-header a {
+    width: 30px;
+    height: 30px;
+    margin-left: auto;
+    margin-right: 20px;
+}
+
 h2 {
     margin-top: 100px;
 }
@@ -132,4 +139,18 @@ h2 {
 
 .overlay.active {
     display: block;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+footer a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+footer a:hover {
+    text-decoration: underline;
 }
