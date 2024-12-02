@@ -3,7 +3,7 @@ name: Build and Deploy to GitHub Pages - dev
 on:
   push:
     branches:
-      - dev
+      - main
 
 permissions:
   contents: write
